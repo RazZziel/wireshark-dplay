@@ -1,0 +1,58 @@
+Wireshark Automated Build Release Notes
+
+   ------------------------------------------------------------------
+
+What is Wireshark?
+
+   Wireshark is the world's most popular network protocol analyzer.
+   It is used for troubleshooting, analysis, development, and
+   education.
+
+What's New
+
+   Please review the SVN log to get a list of all changes
+
+Getting Wireshark
+
+   Wireshark source code and installation packages are available from
+   the [1]download page on the main web site.
+
+  Vendor-supplied Packages
+
+   Most Linux and Unix vendors supply their own Wireshark packages.
+   You can usually install or upgrade Wireshark using the package
+   management system specific to that platform. A list of third-party
+   packages can be found on the [1]download page on the Wireshark
+   web site.
+
+File Locations
+
+   Wireshark and TShark look in several different locations for
+   preference files, plugins, SNMP MIBS, and RADIUS dictionaries.
+   These locations vary from platform to platform. You can use
+   About->Folders to find the default locations on your system.
+
+Known Problems
+
+   See: http://wiki.wireshark.org/KnownBugs
+
+Getting Help
+
+   Community support is available on the wireshark-users mailing
+   list. Subscription information and archives for all of Wireshark's
+   mailing lists can be found on [2]the web site.
+
+   Commercial support, training, and development services are
+   available from [3]CACE Technologies.
+
+Frequently Asked Questions
+
+   A complete FAQ is available on the [4]Wireshark web site.
+
+References
+
+   Visible links
+   1. http://www.wireshark.org/download.html
+   2. http://www.wireshark.org/lists/
+   3. http://www.cacetech.com/
+   4. http://www.wireshark.org/faq.html

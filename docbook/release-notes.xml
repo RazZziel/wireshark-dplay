@@ -1,0 +1,339 @@
+<?xml version="1.0"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
+"http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd" [
+
+<!-- $Id$ -->
+
+<!--
+DOCUMENT SECTION
+-Use this section to encode all document information
+-->
+
+<!--
+Wireshark Info
+-->
+  <!ENTITY WiresharkCurrentVersion "1.3.0">
+
+]>
+
+<article>
+  <title>Wireshark &WiresharkCurrentVersion; Release Notes</title>
+
+  <section id="WhatIs"><title>What is Wireshark?</title>
+    <para>
+      Wireshark is the world's most popular network protocol analyzer.  It
+      is used for troubleshooting, analysis, development, and education.
+    </para>
+  </section>
+
+  <section id="WhatsNew"><title>What's New</title>
+    <section id="BugFixes"><title>Bug Fixes</title>
+    <para>
+
+      The following vulnerabilities have been fixed.  See the
+      <ulink url="http://www.wireshark.org/security/wnpa-sec-2007-02.html">security advisory</ulink> for details and a workaround.
+
+      <itemizedlist>
+
+        <listitem>
+          <para>
+            The NetFlow dissector could run off with your dog, crash your truck,
+            and write a country music song about the experience.
+            <!-- Fixed in r????? -->
+            <!-- (Bug <ulink url="http://bugs.wireshark.org/bugzilla/show_bug.cgi?id=????">????</ulink>) -->
+          </para>
+          <para>Versions affected: 0.99.5 to 1.0.8</para>
+          <para>
+            <!-- <ulink url="http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2007-????">CVE-2007-????</ulink> -->
+          </para>
+        </listitem>
+
+      </itemizedlist>
+
+    </para>
+
+    <para>
+
+    The following bugs have been fixed:
+
+      <itemizedlist>
+
+        <listitem><para>
+            Wireshark could crash without warning.
+        </para></listitem>
+
+      </itemizedlist>
+
+    </para>
+
+    </section>
+
+    <section id="NewFeatures"><title>New and Updated Features</title>
+    <para>
+      The following features are new (or have been significantly updated)
+      since version 1.0:
+
+      <itemizedlist>
+
+        <listitem>
+          <para>
+            Wireshark has a spiffy new start page.
+          </para>
+        </listitem>
+
+        <listitem>
+          <para>
+            Display filters now autocomplete.
+          </para>
+        </listitem>
+
+        <listitem>
+          <para>
+            Support for the c-ares resolver library has been added. It
+            has many advantages over ADNS.
+          </para>
+        </listitem>
+
+        <listitem>
+          <para>
+            Many new protocol dissectors and capture file formats have been
+            added (see below for a complete list).
+          </para>
+        </listitem>
+
+        <listitem>
+          <para>
+            Macintosh OS X support has been improved.
+          </para>
+        </listitem>
+
+        <listitem>
+          <para>
+            <ulink url="http://www.maxmind.com/app/ip-location">GeoIP database
+            lookups.</ulink>
+          </para>
+        </listitem>
+
+        <listitem>
+          <para>
+            <ulink url="http://openstreetmap.org/">OpenStreetMap</ulink> + GeoIP
+            integration.
+          </para>
+        </listitem>
+
+        <listitem>
+          <para>
+            Improved <trademark class="registered">Postscript</trademark> print
+            output.
+          </para>
+        </listitem>
+
+        <listitem>
+          <para>
+            The preference handling code is now much smarter about changes.
+          </para>
+        </listitem>
+
+        <listitem>
+          <para>
+            Support for <ulink url="http://www.winpcap.org/ntar/draft/PCAP-DumpFileFormat.html">Pcap-ng</ulink>,
+            the next-generation capture file format.
+          </para>
+        </listitem>
+
+        <listitem>
+          <para>
+            Support for process information correlation via IPFIX.
+          </para>
+        </listitem>
+
+        <listitem>
+          <para>
+            Column widths are now saved.
+          </para>
+        </listitem>
+
+        <listitem>
+          <para>
+            The last used configuration profile is now saved.
+          </para>
+        </listitem>
+
+        <listitem>
+          <para>
+            Protocol preferences are changeable from the packet details context menu.
+          </para>
+        </listitem>
+
+        <listitem>
+          <para>
+            Support for IP packet comparison.
+          </para>
+        </listitem>
+
+        <listitem>
+          <para>
+            GTK1 is no longer supported. (Yes, this is a feature.)
+          </para>
+        </listitem>
+
+        <listitem>
+          <para>
+            Official Windows packages are now built using Microsoft Visual C++
+            2008 SP1.
+          </para>
+        </listitem>
+
+      </itemizedlist>
+
+    </para>
+    </section>
+
+    <section id="NewProtocols"><title>New Protocol Support</title>
+    <para>
+
+    </para>
+    </section>
+
+    <section id="UpdatedProtocols"><title>Updated Protocol Support</title> <para>
+
+    </para>
+    </section>
+
+    <section id="NewCapture"><title>New and Updated Capture File Support</title>
+    <para>
+
+    </para>
+    </section>
+
+  </section>
+
+  <section id="GettingWireshark"><title>Getting Wireshark</title>
+    <para>
+      Wireshark source code and installation packages are available from
+      the <ulink url="http://www.wireshark.org/download.html">download
+      page</ulink> on the main web site.
+    </para>
+
+    <section id="VendorPackages"><title>Vendor-supplied Packages</title>
+      <para>
+	Most Linux and Unix vendors supply their own Wireshark packages.
+	You can usually install or upgrade Wireshark using the package management
+	system specific to that platform.  A list of third-party packages
+	can be found on the
+	<ulink url="http://www.wireshark.org/download.html#otherplat">download page</ulink> on the Wireshark web site.
+      </para>
+    </section>
+
+  </section>
+
+  <!-- XXX needs to be written
+  <section id="RemovingWireshark"><title>Removing Wireshark</title>
+    <para>
+    </para>
+  </section>
+  -->
+
+  <section id="FileLocations"><title>File Locations</title>
+    <para>
+      Wireshark and TShark look in several different locations for
+      preference files, plugins, SNMP MIBS, and RADIUS dictionaries.
+      These locations vary from platform to platform.  You can use
+      About->Folders to find the default locations on your system.
+    </para>
+  </section>
+
+  <section id="KnownProblems"><title>Known Problems</title>
+
+    <para>
+      Wireshark may appear offscreen on multi-monitor Windows systems.
+      (<ulink url="http://bugs.wireshark.org/bugzilla/show_bug.cgi?id=553">Bug
+      553</ulink>)
+    </para>
+
+    <para>
+      Wireshark might make your system disassociate from a wireless network
+      on OS X.
+      (<ulink url="http://bugs.wireshark.org/bugzilla/show_bug.cgi?id=1315">Bug
+      1315</ulink>)
+    </para>
+
+    <para>
+      Dumpcap might not quit if Wireshark or TShark crashes.
+      (<ulink url="http://bugs.wireshark.org/bugzilla/show_bug.cgi?id=1419">Bug
+      1419</ulink>)
+    </para>
+
+    <para>
+      Wireshark is unable to decrypt WPA group keys.
+      (<ulink url="http://bugs.wireshark.org/bugzilla/show_bug.cgi?id=1420">Bug
+      1420</ulink>)
+    </para>
+
+    <para>
+      Wireshark is unable to decrypt WPA group keys.
+      (<ulink url="http://bugs.wireshark.org/bugzilla/show_bug.cgi?id=1420">Bug
+      1420</ulink>)
+    </para>
+
+    <para>
+      The BER dissector might infinitely loop.
+      (<ulink url="http://bugs.wireshark.org/bugzilla/show_bug.cgi?id=1516">Bug
+      1516</ulink>)
+    </para>
+
+    <para>
+      Wireshark can't dynamically update the packet list. This means that host
+      name resolutions above a certain response time threshold won't show up in
+      the packet list.
+      (<ulink url="http://bugs.wireshark.org/bugzilla/show_bug.cgi?id=1605">Bug
+      1605</ulink>)
+    </para>
+
+    <para>
+      Capture filters aren't applied when capturing from named pipes.
+      (<ulink url="http://bugs.wireshark.org/bugzilla/show_bug.cgi?id=1814">Bug
+      1814</ulink>)
+    </para>
+
+    <para>
+      Wireshark might freeze when reading from a pipe.
+      (<ulink url="http://bugs.wireshark.org/bugzilla/show_bug.cgi?id=2082">Bug
+      2082</ulink>)
+    </para>
+
+    <para>
+      Capturing from named pipes might be delayed on Windows.
+      (<ulink url="http://bugs.wireshark.org/bugzilla/show_bug.cgi?id=2200">Bug
+      2200</ulink>)
+    </para>
+
+    <para>
+      Filtering tshark captures with display filters (-R) no longer works.
+      (<ulink url="http://bugs.wireshark.org/bugzilla/show_bug.cgi?id=2234">Bug
+      2234</ulink>)
+    </para>
+
+  </section>
+
+  <section id="GettingHelp"><title>Getting Help</title>
+    <para>
+    Community support is available on the wireshark-users mailing list.
+    Subscription information and archives for all of Wireshark's mailing
+    lists can be found on <ulink url="http://www.wireshark.org/lists/">the
+    web site</ulink>.
+    </para>
+    <para>
+    Commercial support, training, and development services are available
+    from <ulink url="http://www.cacetech.com/">CACE Technologies</ulink>.
+    </para>
+  </section>
+
+  <section id="FAQ"><title>Frequently Asked Questions</title>
+    <para>
+    A complete FAQ is available on the
+    <ulink url="http://www.wireshark.org/faq.html">Wireshark web site</ulink>.
+    </para>
+  </section>
+
+</article>
