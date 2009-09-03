@@ -497,8 +497,8 @@ static gint dissect_session_desc(proto_tree *tree, tvbuff_t *tvb, gint offset)
     proto_tree_add_boolean(flags_tree, hf_dplay_flags_no_create_players, tvb, offset, 4, flags);
     offset += 4;
 
-    proto_tree_add_item(tree, hf_dplay_instance_guid, tvb, offset, 16, FALSE); offset += 16;
-    proto_tree_add_item(tree, hf_dplay_game_guid, tvb, offset, 16, FALSE); offset += 16;
+    proto_tree_add_item(tree, hf_dplay_instance_guid, tvb, offset, 16, TRUE); offset += 16;
+    proto_tree_add_item(tree, hf_dplay_game_guid, tvb, offset, 16, TRUE); offset += 16;
     proto_tree_add_item(tree, hf_dplay_max_players, tvb, offset, 4, TRUE); offset += 4;
     proto_tree_add_item(tree, hf_dplay_curr_players, tvb, offset, 4, TRUE); offset += 4;
     proto_tree_add_item(tree, hf_dplay_sess_name_ptr, tvb, offset, 4, FALSE); offset += 4;
@@ -532,7 +532,7 @@ static gint dissect_packed_player(proto_tree *tree, tvbuff_t *tvb, gint offset)
     proto_tree_add_boolean(flags_tree, hf_dplay_pp_flag_sysplayer, tvb, offset, 4, flags);
     offset += 4;
 
-    proto_tree_add_item(tree, hf_dplay_pp_id, tvb, offset, 4, FALSE); offset += 4;
+    proto_tree_add_item(tree, hf_dplay_pp_id, tvb, offset, 4, TRUE); offset += 4;
 
     sn_len = tvb_get_letohl(tvb, offset);
     proto_tree_add_item(tree, hf_dplay_pp_short_name_len, tvb, offset, 4, TRUE); offset += 4;
@@ -545,7 +545,7 @@ static gint dissect_packed_player(proto_tree *tree, tvbuff_t *tvb, gint offset)
     num_players = tvb_get_letohl(tvb, offset);
     proto_tree_add_item(tree, hf_dplay_pp_num_players, tvb, offset, 4, TRUE); offset += 4;
 
-    proto_tree_add_item(tree, hf_dplay_pp_system_player, tvb, offset, 4, FALSE); offset += 4;
+    proto_tree_add_item(tree, hf_dplay_pp_system_player, tvb, offset, 4, TRUE); offset += 4;
     proto_tree_add_item(tree, hf_dplay_pp_fixed_size, tvb, offset, 4, TRUE); offset += 4;
     proto_tree_add_item(tree, hf_dplay_pp_dialect, tvb, offset, 4, TRUE); offset += 4;
     proto_tree_add_item(tree, hf_dplay_pp_unknown_1, tvb, offset, 4, FALSE); offset += 4;
@@ -565,12 +565,12 @@ static gint dissect_packed_player(proto_tree *tree, tvbuff_t *tvb, gint offset)
     }
 
     for (i=0; i < num_players; ++i) {
-        proto_tree_add_item(tree, hf_dplay_pp_player_id, tvb, offset, 4, FALSE); offset += 4;
+        proto_tree_add_item(tree, hf_dplay_pp_player_id, tvb, offset, 4, TRUE); offset += 4;
     }
 
     /* Size seems to miss the unknown empty dword */
     if (size + 4 > offset) {
-        proto_tree_add_item(tree, hf_dplay_pp_parent_id, tvb, offset, 4, FALSE); offset += 4;
+        proto_tree_add_item(tree, hf_dplay_pp_parent_id, tvb, offset, 4, TRUE); offset += 4;
     }
 
     return offset;
@@ -648,7 +648,7 @@ static gint dissect_dplay_super_packed_player(proto_tree *tree, tvbuff_t *tvb, g
     if (is_sysplayer) {
         proto_tree_add_item(tree, hf_dplay_spp_dialect, tvb, offset, 4, TRUE);
     } else {
-        proto_tree_add_item(tree, hf_dplay_spp_sys_player_id, tvb, offset, 4, FALSE);
+        proto_tree_add_item(tree, hf_dplay_spp_sys_player_id, tvb, offset, 4, TRUE);
     }
     offset += 4;
 
@@ -688,7 +688,7 @@ static gint dissect_dplay_super_packed_player(proto_tree *tree, tvbuff_t *tvb, g
     }
 
     if (have_parent_id) {
-        proto_tree_add_item(tree, hf_dplay_spp_parent_id, tvb, offset, 4, FALSE); offset += 4;
+        proto_tree_add_item(tree, hf_dplay_spp_parent_id, tvb, offset, 4, TRUE); offset += 4;
     }
 
     if (shortcut_count_type) {
@@ -698,7 +698,7 @@ static gint dissect_dplay_super_packed_player(proto_tree *tree, tvbuff_t *tvb, g
         proto_tree_add_item(tree, hf_dplay_spp_shortcut_count, tvb, offset, len, TRUE);
         offset += len;
         for (i=0; i < shortcut_count; ++i) {
-            proto_tree_add_item(tree, hf_dplay_spp_shortcut_id, tvb, offset, 4, FALSE); offset += 4;
+            proto_tree_add_item(tree, hf_dplay_spp_shortcut_id, tvb, offset, 4, TRUE); offset += 4;
         }
     }
 
@@ -758,7 +758,7 @@ static gint dissect_type02_message(proto_tree *tree, tvbuff_t *tvb, gint offset)
     passwd_offset = tvb_get_letohl(tvb, offset + 16);
     flags = tvb_get_letohl(tvb, offset + 20);
 
-    proto_tree_add_item(tree, hf_dplay_type_02_game_guid, tvb, offset, 16, FALSE); offset += 16;
+    proto_tree_add_item(tree, hf_dplay_type_02_game_guid, tvb, offset, 16, TRUE); offset += 16;
     proto_tree_add_item(tree, hf_dplay_type_02_password_offset, tvb, offset, 4, TRUE); offset += 4;
 
     flags_item = proto_tree_add_item(tree, hf_dplay_type_02_flags, tvb, offset, 4, TRUE);
@@ -796,7 +796,7 @@ static gint dissect_type07_message(proto_tree *tree, tvbuff_t *tvb, gint offset)
 {
     guint32 sspi_offset, capi_offset;
 
-    proto_tree_add_item(tree, hf_dplay_type_07_dpid, tvb, offset, 4, FALSE); offset += 4;
+    proto_tree_add_item(tree, hf_dplay_type_07_dpid, tvb, offset, 4, TRUE); offset += 4;
     offset = dissect_security_desc(tree, tvb, offset);
 
     sspi_offset = tvb_get_letohl(tvb, offset);
@@ -821,9 +821,9 @@ static gint dissect_player_message(proto_tree *tree, tvbuff_t *tvb, gint offset)
 {
     guint32 pp_ofs;
 
-    proto_tree_add_item(tree, hf_dplay_multi_id_to, tvb, offset, 4, FALSE); offset += 4;
-    proto_tree_add_item(tree, hf_dplay_multi_player_id, tvb, offset, 4, FALSE); offset += 4;
-    proto_tree_add_item(tree, hf_dplay_multi_group_id, tvb, offset, 4, FALSE); offset += 4;
+    proto_tree_add_item(tree, hf_dplay_multi_id_to, tvb, offset, 4, TRUE); offset += 4;
+    proto_tree_add_item(tree, hf_dplay_multi_player_id, tvb, offset, 4, TRUE); offset += 4;
+    proto_tree_add_item(tree, hf_dplay_multi_group_id, tvb, offset, 4, TRUE); offset += 4;
     pp_ofs = tvb_get_letohl(tvb, offset);
     proto_tree_add_item(tree, hf_dplay_multi_create_offset, tvb, offset, 4, TRUE); offset += 4;
     proto_tree_add_item(tree, hf_dplay_multi_password_offset, tvb, offset, 4, TRUE); offset += 4;
@@ -838,8 +838,8 @@ static gint dissect_type0f_message(proto_tree *tree, tvbuff_t *tvb, gint offset)
 {
     guint32 data_size;
 
-    proto_tree_add_item(tree, hf_dplay_type_0f_id_to, tvb, offset, 4, FALSE); offset += 4;
-    proto_tree_add_item(tree, hf_dplay_type_0f_id, tvb, offset, 4, FALSE); offset += 4;
+    proto_tree_add_item(tree, hf_dplay_type_0f_id_to, tvb, offset, 4, TRUE); offset += 4;
+    proto_tree_add_item(tree, hf_dplay_type_0f_id, tvb, offset, 4, TRUE); offset += 4;
     data_size = tvb_get_letohl(tvb, offset);
     proto_tree_add_item(tree, hf_dplay_type_0f_data_size, tvb, offset, 4, TRUE); offset += 4;
     proto_tree_add_item(tree, hf_dplay_type_0f_data_offset, tvb, offset, 4, TRUE); offset += 4;
@@ -853,9 +853,9 @@ static gint dissect_type13_message(proto_tree *tree, tvbuff_t *tvb, gint offset)
 {
     guint32 pp_ofs, pw_ofs;
 
-    proto_tree_add_item(tree, hf_dplay_type_13_id_to, tvb, offset, 4, FALSE); offset += 4;
-    proto_tree_add_item(tree, hf_dplay_type_13_player_id, tvb, offset, 4, FALSE); offset += 4;
-    proto_tree_add_item(tree, hf_dplay_type_13_group_id, tvb, offset, 4, FALSE); offset += 4;
+    proto_tree_add_item(tree, hf_dplay_type_13_id_to, tvb, offset, 4, TRUE); offset += 4;
+    proto_tree_add_item(tree, hf_dplay_type_13_player_id, tvb, offset, 4, TRUE); offset += 4;
+    proto_tree_add_item(tree, hf_dplay_type_13_group_id, tvb, offset, 4, TRUE); offset += 4;
     pp_ofs = tvb_get_letohl(tvb, offset);
     proto_tree_add_item(tree, hf_dplay_type_13_create_offset, tvb, offset, 4, TRUE); offset += 4;
     pw_ofs = tvb_get_letohl(tvb, offset);
@@ -876,7 +876,7 @@ static gint dissect_type15_message(proto_tree *tree, tvbuff_t *tvb, gint offset)
     proto_tree *enc_tree = NULL;
     second_message_type = tvb_get_letohs(tvb, 72);
 
-    proto_tree_add_item(tree, hf_dplay_message_guid, tvb, offset, 16, FALSE); offset += 16;
+    proto_tree_add_item(tree, hf_dplay_message_guid, tvb, offset, 16, TRUE); offset += 16;
     proto_tree_add_item(tree, hf_dplay_type_15_packet_idx, tvb, offset, 4, TRUE); offset += 4;
     proto_tree_add_item(tree, hf_dplay_type_15_data_size, tvb, offset, 4, TRUE); offset += 4;
     proto_tree_add_item(tree, hf_dplay_type_15_offset, tvb, offset, 4, TRUE); offset += 4;
@@ -921,7 +921,7 @@ static gint dissect_type15_message(proto_tree *tree, tvbuff_t *tvb, gint offset)
 
 static gint dissect_ping_message(proto_tree *tree, tvbuff_t *tvb, gint offset)
 {
-    proto_tree_add_item(tree, hf_dplay_ping_id_from, tvb, offset, 4, FALSE); offset += 4;
+    proto_tree_add_item(tree, hf_dplay_ping_id_from, tvb, offset, 4, TRUE); offset += 4;
     proto_tree_add_item(tree, hf_dplay_ping_tick_count, tvb, offset, 4, TRUE); offset += 4;
 
     return offset;
@@ -931,7 +931,7 @@ static gint dissect_type1a_message(proto_tree *tree, tvbuff_t *tvb, gint offset)
 {
     guint32 sn_ofs, pw_ofs;
 
-    proto_tree_add_item(tree, hf_dplay_type_1a_id_to, tvb, offset, 4, FALSE); offset += 4;
+    proto_tree_add_item(tree, hf_dplay_type_1a_id_to, tvb, offset, 4, TRUE); offset += 4;
     sn_ofs = tvb_get_letohl(tvb, offset);
     proto_tree_add_item(tree, hf_dplay_type_1a_sess_name_ofs, tvb, offset, 4, TRUE); offset += 4;
     pw_ofs = tvb_get_letohl(tvb, offset);
@@ -1004,7 +1004,7 @@ static gint dissect_type29_message(proto_tree *tree, tvbuff_t *tvb, gint offset)
 
 static gint dissect_type2f_message(proto_tree *tree, tvbuff_t *tvb, gint offset)
 {
-    proto_tree_add_item(tree, hf_dplay_type_2f_dpid, tvb, offset, 4, FALSE); offset += 4;
+    proto_tree_add_item(tree, hf_dplay_type_2f_dpid, tvb, offset, 4, TRUE); offset += 4;
     return offset;
 }
 
@@ -1243,7 +1243,7 @@ void proto_register_dplay(void)
         { "DirectPlay second dialect version", "dplay.dialect.version_2", FT_UINT16, BASE_HEX,
         VALS(dplay_proto_dialect_val), 0x0, NULL, HFILL}},
     { &hf_dplay_player_msg,
-        { "DirectPlay Player to Player message", "dplay.player_msg", FT_BYTES, BASE_NONE,
+        { "DirectPlay Player to Player message", "dplay.player_msg", FT_BYTES, BASE_HEX,
         NULL, 0x0, NULL, HFILL}},
 
     /* Session Desc structure fields */
@@ -1314,34 +1314,34 @@ void proto_register_dplay(void)
         { "DirectPlay session desc length", "dplay.sess_desc.length", FT_UINT32, BASE_DEC,
         NULL, 0x0, NULL, HFILL}},
     { &hf_dplay_max_players,
-        { "DirectPlay max players", "dplay.sess_desc.max_players", FT_UINT32, BASE_DEC,
+        { "DirectPlay max players ", "dplay.sess_desc.max_players", FT_UINT32, BASE_DEC,
         NULL, 0x0, NULL, HFILL}},
     { &hf_dplay_curr_players,
         { "DirectPlay current players", "dplay.sess_desc.curr_players", FT_UINT32, BASE_DEC,
         NULL, 0x0, NULL, HFILL}},
     { &hf_dplay_sess_name_ptr,
-        { "Session description name pointer placeholder", "dplay.sess_desc.name_ptr", FT_BYTES, BASE_NONE,
+        { "Session description name pointer placeholder", "dplay.sess_desc.name_ptr", FT_BYTES, BASE_HEX,
         NULL, 0x0, NULL, HFILL}},
     { &hf_dplay_passwd_ptr,
-        { "Session description password pointer placeholder", "dplay.sess_desc.pw_ptr", FT_BYTES, BASE_NONE,
+        { "Session description password pointer placeholder", "dplay.sess_desc.pw_ptr", FT_BYTES, BASE_HEX,
         NULL, 0x0, NULL, HFILL}},
     { &hf_dplay_sess_desc_reserved_1,
-        { "Session description reserved 1", "dplay.sess_desc.res_1", FT_BYTES, BASE_NONE,
+        { "Session description reserved 1", "dplay.sess_desc.res_1", FT_BYTES, BASE_HEX,
         NULL, 0x0, NULL, HFILL}},
     { &hf_dplay_sess_desc_reserved_2,
-        { "Session description reserved 2", "dplay.sess_desc.res_2", FT_BYTES, BASE_NONE,
+        { "Session description reserved 2", "dplay.sess_desc.res_2", FT_BYTES, BASE_HEX,
         NULL, 0x0, NULL, HFILL}},
     { &hf_dplay_sess_desc_user_1,
-        { "Session description user defined 1", "dplay.sess_desc.user_1", FT_BYTES, BASE_NONE,
+        { "Session description user defined 1", "dplay.sess_desc.user_1", FT_BYTES, BASE_HEX,
         NULL, 0x0, NULL, HFILL}},
     { &hf_dplay_sess_desc_user_2,
-        { "Session description user defined 2", "dplay.sess_desc.user_2", FT_BYTES, BASE_NONE,
+        { "Session description user defined 2", "dplay.sess_desc.user_2", FT_BYTES, BASE_HEX,
         NULL, 0x0, NULL, HFILL}},
     { &hf_dplay_sess_desc_user_3,
-        { "Session description user defined 3", "dplay.sess_desc.user_3", FT_BYTES, BASE_NONE,
+        { "Session description user defined 3", "dplay.sess_desc.user_3", FT_BYTES, BASE_HEX,
         NULL, 0x0, NULL, HFILL}},
     { &hf_dplay_sess_desc_user_4,
-        { "Session description user defined 4", "dplay.sess_desc.user_4", FT_BYTES, BASE_NONE,
+        { "Session description user defined 4", "dplay.sess_desc.user_4", FT_BYTES, BASE_HEX,
         NULL, 0x0, NULL, HFILL}},
 
     /* PackedPlayer structure fields */
@@ -1364,7 +1364,7 @@ void proto_register_dplay(void)
         { "sending player on local machine", "dplay.pp.flags.sending", FT_BOOLEAN, 32,
         TFS(&tfs_dplay_flag), DPLAY_SPP_FLAG_SENDING, NULL, HFILL}},
     { &hf_dplay_pp_id,
-        { "PackedPlayer ID", "dplay.pp.id", FT_BYTES, BASE_NONE,
+        { "PackedPlayer ID", "dplay.pp.id", FT_UINT32, BASE_HEX,
         NULL, 0x0, NULL, HFILL}},
     { &hf_dplay_pp_short_name_len,
         { "PackedPlayer short name length", "dplay.pp.short_name_len", FT_UINT32, BASE_HEX,
@@ -1382,7 +1382,7 @@ void proto_register_dplay(void)
         { "PackedPlayer player count", "dplay.pp.player_count", FT_UINT32, BASE_HEX,
         NULL, 0x0, NULL, HFILL}},
     { &hf_dplay_pp_system_player,
-        { "PackedPlayer system player ID", "dplay.pp.sysplayer_id", FT_BYTES, BASE_NONE,
+        { "PackedPlayer system player ID", "dplay.pp.sysplayer_id", FT_UINT32, BASE_HEX,
         NULL, 0x0, NULL, HFILL}},
     { &hf_dplay_pp_fixed_size,
         { "PackedPlayer fixed size", "dplay.pp.fixed_size", FT_UINT32, BASE_DEC,
@@ -1391,7 +1391,7 @@ void proto_register_dplay(void)
         { "PackedPlayer dialect version", "dplay.pp.dialect", FT_UINT32, BASE_HEX,
         VALS(&dplay_proto_dialect_val), 0x0, NULL, HFILL}},
     { &hf_dplay_pp_unknown_1,
-        { "PackedPlayer unknown 1", "dplay.pp.unknown_1", FT_BYTES, BASE_NONE,
+        { "PackedPlayer unknown 1", "dplay.pp.unknown_1", FT_BYTES, BASE_HEX,
         NULL, 0x0, NULL, HFILL}},
     { &hf_dplay_pp_short_name,
         { "PackedPlayer short name", "dplay.pp.short_name", FT_STRING, BASE_NONE,
@@ -1400,16 +1400,16 @@ void proto_register_dplay(void)
         { "PackedPlayer long name", "dplay.pp.short_name", FT_STRING, BASE_NONE,
         NULL, 0x0, NULL, HFILL}},
     { &hf_dplay_pp_player_data,
-        { "PackedPlayer player data", "dplay.pp.player_data", FT_BYTES, BASE_NONE,
+        { "PackedPlayer player data", "dplay.pp.player_data", FT_BYTES, BASE_HEX,
         NULL, 0x0, NULL, HFILL}},
     { &hf_dplay_pp_sp_data,
-        { "PackedPlayer service provider data", "dplay.pp.sp_data", FT_BYTES, BASE_NONE,
+        { "PackedPlayer service provider data", "dplay.pp.sp_data", FT_BYTES, BASE_HEX,
         NULL, 0x0, NULL, HFILL}},
     { &hf_dplay_pp_player_id,
-        { "PackedPlayer player ID", "dplay.pp.player_id", FT_BYTES, BASE_NONE,
+        { "PackedPlayer player ID", "dplay.pp.player_id", FT_UINT32, BASE_HEX,
         NULL, 0x0, NULL, HFILL}},
     { &hf_dplay_pp_parent_id,
-        { "PackedPlayer parent ID", "dplay.pp.parent_id", FT_BYTES, BASE_NONE,
+        { "PackedPlayer parent ID", "dplay.pp.parent_id", FT_UINT32, BASE_HEX,
         NULL, 0x0, NULL, HFILL}},
 
     /* SuperPackedPlayer structure fields */
@@ -1432,7 +1432,7 @@ void proto_register_dplay(void)
         { "sending player on local machine", "dplay.spp.flags.sending", FT_BOOLEAN, 32,
         TFS(&tfs_dplay_flag), DPLAY_SPP_FLAG_SENDING, NULL, HFILL}},
     { &hf_dplay_spp_id,
-        { "SuperPackedPlayer ID", "dplay.spp.id", FT_BYTES, BASE_NONE,
+        { "SuperPackedPlayer ID", "dplay.spp.id", FT_UINT32, BASE_HEX,
         NULL, 0x0, NULL, HFILL}},
     { &hf_dplay_spp_player_info_mask,
         { "SuperPackedPlayer player info mask", "dplay.spp.pim", FT_UINT32, BASE_HEX,
@@ -1462,7 +1462,7 @@ void proto_register_dplay(void)
         { "SuperPackedPlayer dialect version", "dplay.spp.dialect", FT_UINT32, BASE_HEX,
         VALS(&dplay_proto_dialect_val), 0x0, NULL, HFILL}},
     { &hf_dplay_spp_sys_player_id,
-        { "SuperPackedPlayer system player ID", "dplay.spp.sysplayer_id", FT_BYTES, BASE_NONE,
+        { "SuperPackedPlayer system player ID", "dplay.spp.sysplayer_id", FT_UINT32, BASE_HEX,
         NULL, 0x0, NULL, HFILL}},
     { &hf_dplay_spp_short_name,
         { "SuperPackedPlayer short name", "dplay.spp.short_name", FT_STRING, BASE_NONE,
@@ -1474,28 +1474,28 @@ void proto_register_dplay(void)
         { "SuperPackedPlayer player data length", "dplay.spp.pd_length", FT_UINT32, BASE_HEX,
         NULL, 0x0, NULL, HFILL}},
     { &hf_dplay_spp_player_data,
-        { "SuperPackedPlayer player data", "dplay.spp.player_data", FT_BYTES, BASE_NONE,
+        { "SuperPackedPlayer player data", "dplay.spp.player_data", FT_BYTES, BASE_HEX,
         NULL, 0x0, NULL, HFILL}},
     { &hf_dplay_spp_sp_data_length,
         { "SuperPackedPlayer service provider data length", "dplay.spp.sp_data_length", FT_UINT32, BASE_HEX,
         NULL, 0x0, NULL, HFILL}},
     { &hf_dplay_spp_sp_data,
-        { "SuperPackedPlayer service provider data", "dplay.spp.sp_data", FT_BYTES, BASE_NONE,
+        { "SuperPackedPlayer service provider data", "dplay.spp.sp_data", FT_BYTES, BASE_HEX,
         NULL, 0x0, NULL, HFILL}},
     { &hf_dplay_spp_player_count,
         { "SuperPackedPlayer player count", "dplay.spp.player_count", FT_UINT32, BASE_HEX,
         NULL, 0x0, NULL, HFILL}},
     { &hf_dplay_spp_player_id,
-        { "SuperPackedPlayer player ID", "dplay.spp.player_id", FT_BYTES, BASE_NONE,
+        { "SuperPackedPlayer player ID", "dplay.spp.player_id", FT_UINT32, BASE_HEX,
         NULL, 0x0, NULL, HFILL}},
     { &hf_dplay_spp_parent_id,
-        { "SuperPackedPlayer parent ID", "dplay.spp.parent_id", FT_BYTES, BASE_NONE,
+        { "SuperPackedPlayer parent ID", "dplay.spp.parent_id", FT_UINT32, BASE_HEX,
         NULL, 0x0, NULL, HFILL}},
     { &hf_dplay_spp_shortcut_count,
         { "SuperPackedPlayer shortcut count", "dplay.spp.shortcut_count", FT_UINT32, BASE_HEX,
         NULL, 0x0, NULL, HFILL}},
     { &hf_dplay_spp_shortcut_id,
-        { "SuperPackedPlayer shortcut ID", "dplay.spp.shortcut_id", FT_BYTES, BASE_NONE,
+        { "SuperPackedPlayer shortcut ID", "dplay.spp.shortcut_id", FT_UINT32, BASE_HEX,
         NULL, 0x0, NULL, HFILL}},
 
     /* Data fields for SecDesc struct */
@@ -1506,10 +1506,10 @@ void proto_register_dplay(void)
         { "SecDesc flags", "dplay.sd.flags", FT_UINT32, BASE_HEX,
         NULL, 0x0, NULL, HFILL}},
     { &hf_dplay_sd_sspi,
-        { "SecDesc SSPI provider ptr", "dplay.sd.sspi", FT_BYTES, BASE_NONE,
+        { "SecDesc SSPI provider ptr", "dplay.sd.sspi", FT_BYTES, BASE_HEX,
         NULL, 0x0, NULL, HFILL}},
     { &hf_dplay_sd_capi,
-        { "SecDesc CAPI provider ptr", "dplay.sd.capi", FT_BYTES, BASE_NONE,
+        { "SecDesc CAPI provider ptr", "dplay.sd.capi", FT_BYTES, BASE_HEX,
         NULL, 0x0, NULL, HFILL}},
     { &hf_dplay_sd_capi_type,
         { "SecDesc CAPI provider type", "dplay.sd.capi_type", FT_UINT32, BASE_HEX,
@@ -1571,7 +1571,7 @@ void proto_register_dplay(void)
 
     /* Data fields for message type 0x0007 */
     { &hf_dplay_type_07_dpid,
-        { "DirectPlay ID", "dplay.type_07.dpid", FT_BYTES, BASE_NONE,
+        { "DirectPlay ID", "dplay.type_07.dpid", FT_UINT32, BASE_HEX,
         NULL, 0x0, NULL, HFILL}},
     { &hf_dplay_type_07_sspi_offset,
         { "SSPI provider offset", "dplay.type_07.sspi_offset", FT_UINT32, BASE_DEC,
@@ -1592,13 +1592,13 @@ void proto_register_dplay(void)
     /* Data fields for message type 0x0008, 0x0009, 0x000b, 0x000c, 0x000d,
      * 0x000e, 0x002e and 0x0038*/
     { &hf_dplay_multi_id_to,
-        { "ID to", "dplay.multi.id_to", FT_BYTES, BASE_NONE,
+        { "ID to", "dplay.multi.id_to", FT_UINT32, BASE_HEX,
         NULL, 0x0, NULL, HFILL}},
     { &hf_dplay_multi_player_id,
-        { "Player ID", "dplay.multi.player_id", FT_BYTES, BASE_NONE,
+        { "Player ID", "dplay.multi.player_id", FT_UINT32, BASE_HEX,
         NULL, 0x0, NULL, HFILL}},
     { &hf_dplay_multi_group_id,
-        { "Group ID", "dplay.multi.group_id", FT_BYTES, BASE_NONE,
+        { "Group ID", "dplay.multi.group_id", FT_UINT32, BASE_HEX,
         NULL, 0x0, NULL, HFILL}},
     { &hf_dplay_multi_create_offset,
         { "Offset to PackedPlayer struct", "dplay.multi.create_offset", FT_UINT32, BASE_DEC,
@@ -1612,10 +1612,10 @@ void proto_register_dplay(void)
 
     /* Data fields for message type 0x000f */
     { &hf_dplay_type_0f_id_to,
-        { "ID to", "dplay.type_0f.id_to", FT_BYTES, BASE_NONE,
+        { "ID to", "dplay.type_0f.id_to", FT_UINT32, BASE_HEX,
         NULL, 0x0, NULL, HFILL}},
     { &hf_dplay_type_0f_id,
-        { "Player ID", "dplay.type_0f.player_id", FT_BYTES, BASE_NONE,
+        { "Player ID", "dplay.type_0f.player_id", FT_UINT32, BASE_HEX,
         NULL, 0x0, NULL, HFILL}},
     { &hf_dplay_type_0f_data_size,
         { "Data Size", "dplay.multi.group_id", FT_UINT32, BASE_DEC,
@@ -1624,18 +1624,18 @@ void proto_register_dplay(void)
         { "Data Offset", "dplay.type_0f.data_offset", FT_UINT32, BASE_DEC,
         NULL, 0x0, NULL, HFILL}},
     { &hf_dplay_type_0f_data,
-        { "Player Data", "dplay.type_0f.player_data", FT_BYTES, BASE_NONE,
+        { "Player Data", "dplay.type_0f.player_data", FT_BYTES, BASE_HEX,
         NULL, 0x0, NULL, HFILL}},
 
     /* Data fields for message type 0x0013 */
     { &hf_dplay_type_13_id_to,
-        { "ID to", "dplay.type_13.id_to", FT_BYTES, BASE_NONE,
+        { "ID to", "dplay.type_13.id_to", FT_UINT32, BASE_HEX,
         NULL, 0x0, NULL, HFILL}},
     { &hf_dplay_type_13_player_id,
-        { "Player ID", "dplay.type_13.player_id", FT_BYTES, BASE_NONE,
+        { "Player ID", "dplay.type_13.player_id", FT_UINT32, BASE_HEX,
         NULL, 0x0, NULL, HFILL}},
     { &hf_dplay_type_13_group_id,
-        { "Group ID", "dplay.type_13.group_id", FT_BYTES, BASE_NONE,
+        { "Group ID", "dplay.type_13.group_id", FT_UINT32, BASE_HEX,
         NULL, 0x0, NULL, HFILL}},
     { &hf_dplay_type_13_create_offset,
         { "Create Offset", "dplay.type_13.create_offset", FT_UINT32, BASE_DEC,
@@ -1644,15 +1644,15 @@ void proto_register_dplay(void)
         { "Password Offset", "dplay.type_13.password_offset", FT_UINT32, BASE_DEC,
         NULL, 0x0, NULL, HFILL}},
     { &hf_dplay_type_13_password,
-        { "Password", "dplay.type_13.password", FT_STRING, BASE_NONE,
+        { "Password", "dplay.type_13.password", FT_STRING, BASE_HEX,
         NULL, 0x0, NULL, HFILL}},
     { &hf_dplay_type_13_tick_count,
-        { "Tick count? Looks like an ID", "dplay.type_13.tick_count", FT_BYTES, BASE_NONE,
-        NULL, 0x0, NULL, HFILL}},
+        { "Tick count? Looks like an ID", "dplay.type_13.tick_count", FT_UINT32, BASE_HEX,
+        NULL, 0x0, "", HFILL}},
 
     /* Data fields for message type 0x0015 */
     { &hf_dplay_message_guid,
-        { "Message GUID", "dplay.message.guid", FT_GUID, BASE_NONE,
+        { "Message GUID", "dplay.message.guid", FT_GUID, BASE_HEX,
         NULL, 0x0, NULL, HFILL}},
     { &hf_dplay_type_15_packet_idx,
         { "Packet Index", "dplay.type_15.packet_idx", FT_UINT32, BASE_DEC,
@@ -1675,7 +1675,7 @@ void proto_register_dplay(void)
 
     /* Data field for message type 0x0016 and 0x0017 */
     { &hf_dplay_ping_id_from,
-        { "ID From", "dplay.ping.id_from", FT_BYTES, BASE_NONE,
+        { "ID From", "dplay.ping.id_from", FT_UINT32, BASE_HEX,
         NULL, 0x0, NULL, HFILL}},
     { &hf_dplay_ping_tick_count,
         { "Tick Count", "dplay.ping.tick_count", FT_UINT32, BASE_DEC,
@@ -1683,7 +1683,7 @@ void proto_register_dplay(void)
 
     /* Data fields for message type 0x001a */
     { &hf_dplay_type_1a_id_to,
-        { "ID From", "dplay.type_1a.id_to", FT_BYTES, BASE_NONE,
+        { "ID From", "dplay.type_1a.id_to", FT_UINT32, BASE_HEX,
         NULL, 0x0, NULL, HFILL}},
     { &hf_dplay_type_1a_sess_name_ofs,
         { "Session Name Offset", "dplay.type_1a.sess_name_ofs", FT_UINT32, BASE_DEC,
@@ -1692,10 +1692,10 @@ void proto_register_dplay(void)
         { "Password Offset", "dplay.type_1a.password_offset", FT_UINT32, BASE_DEC,
         NULL, 0x0, NULL, HFILL}},
     { &hf_dplay_type_1a_session_name,
-        { "Session Name", "dplay.type_1a.session_name", FT_STRING, BASE_NONE,
+        { "Session Name", "dplay.type_1a.session_name", FT_STRING, BASE_HEX,
         NULL, 0x0, NULL, HFILL}},
     { &hf_dplay_type_1a_password,
-        { "Password", "dplay.type_1a.password", FT_STRING, BASE_NONE,
+        { "Password", "dplay.type_1a.password", FT_STRING, BASE_HEX,
         NULL, 0x0, NULL, HFILL}},
 
     /* Data fields for message type 0x0029 */
@@ -1729,7 +1729,7 @@ void proto_register_dplay(void)
 
     /* Data fields for message type 0x002f */
     { &hf_dplay_type_2f_dpid,
-        { "ID of the forwarded player", "dplay.type_29.id", FT_BYTES, BASE_NONE,
+        { "ID of the forwarded player", "dplay.type_29.id", FT_UINT32, BASE_HEX,
         NULL, 0x0, NULL, HFILL}},
     };
 
