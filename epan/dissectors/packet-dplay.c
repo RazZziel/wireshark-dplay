@@ -288,6 +288,9 @@ static int hf_dplay_type_29_password = -1;
 /* Message Type 0x002f data fields */
 static int hf_dplay_type_2f_dpid = -1;
 
+/* Error codes */
+static int hf_dplay_error_code = -1;
+
 /* various */
 static gint ett_dplay = -1;
 static gint ett_dplay_header = -1;
@@ -1031,6 +1034,12 @@ static gint dissect_type2f_message(proto_tree *tree, tvbuff_t *tvb, gint offset)
     return offset;
 }
 
+static gint dissect_error_message(proto_tree *tree, tvbuff_t *tvb, gint offset)
+{
+    proto_tree_add_item(tree, hf_dplay_error_code, tvb, offset, 4, TRUE); offset += 4;
+    return offset;
+}
+
 static void dissect_dplay(tvbuff_t *tvb, packet_info *pinfo, proto_tree *tree)
 {
     guint16 message_type;
@@ -1150,6 +1159,10 @@ static void dissect_dplay(tvbuff_t *tvb, packet_info *pinfo, proto_tree *tree)
                 break;
             case 0x002f:
                 offset = dissect_type2f_message(dplay_data, tvb, offset);
+                break;
+            case 0x0024:
+            case 0x001f:
+                offset = dissect_error_message(dplay_data, tvb, offset);
                 break;
         }
     }
@@ -1753,6 +1766,11 @@ void proto_register_dplay(void)
     /* Data fields for message type 0x002f */
     { &hf_dplay_type_2f_dpid,
         { "ID of the forwarded player", "dplay.type_29.id", FT_UINT32, BASE_HEX,
+        NULL, 0x0, NULL, HFILL}},
+
+    /* Data fields for error messages */
+    { &hf_dplay_error_code,
+        { "Error code", "dplay.error", FT_UINT32, BASE_HEX,
         NULL, 0x0, NULL, HFILL}},
     };
 
