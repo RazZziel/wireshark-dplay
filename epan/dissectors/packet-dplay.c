@@ -306,6 +306,7 @@ static gint ett_dplay_type02_flags = -1;
 static gint ett_dplay_type05_flags = -1;
 static gint ett_dplay_type29_spp = -1;
 static gint ett_dplay_pd = -1;
+static gint ett_dplay_pp = -1;
 
 static const value_string dplay_command_val[] = {
     { 0x0001, "Enum Sessions Reply" },
@@ -878,6 +879,8 @@ static gint dissect_type0f_message(proto_tree *tree, tvbuff_t *tvb, gint offset)
 static gint dissect_type13_message(proto_tree *tree, tvbuff_t *tvb, gint offset)
 {
     guint32 pp_ofs, pw_ofs;
+    proto_tree *pp_tree;
+    proto_item *pp_item;
 
     proto_tree_add_item(tree, hf_dplay_type_13_id_to, tvb, offset, 4, TRUE); offset += 4;
     proto_tree_add_item(tree, hf_dplay_type_13_player_id, tvb, offset, 4, TRUE); offset += 4;
@@ -886,8 +889,11 @@ static gint dissect_type13_message(proto_tree *tree, tvbuff_t *tvb, gint offset)
     proto_tree_add_item(tree, hf_dplay_type_13_create_offset, tvb, offset, 4, TRUE); offset += 4;
     pw_ofs = tvb_get_letohl(tvb, offset);
     proto_tree_add_item(tree, hf_dplay_type_13_password_offset, tvb, offset, 4, TRUE); offset += 4;
-    if (pp_ofs)
-        offset = dissect_packed_player(tree, tvb, offset);
+    if (pp_ofs) {
+        pp_item = proto_tree_add_text(tree, tvb, offset, 0, "Packed player");
+        pp_tree = proto_item_add_subtree(pp_item, ett_dplay_pp);
+        offset = dissect_packed_player(pp_tree, tvb, offset);
+    }
     if (pw_ofs)
         offset = display_unicode_string(tree, hf_dplay_type_13_password, tvb, offset);
     proto_tree_add_item(tree, hf_dplay_type_13_tick_count, tvb, offset, 4, TRUE); offset += 4;
@@ -1789,6 +1795,7 @@ void proto_register_dplay(void)
         &ett_dplay_type05_flags,
         &ett_dplay_type29_spp,
         &ett_dplay_pd,
+        &ett_dplay_pp
     };
 
     proto_dplay = proto_register_protocol (
