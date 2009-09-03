@@ -29,6 +29,14 @@
 # include "config.h"
 #endif
 
+#ifdef HAVE_SYS_SOCKET_H
+#include <sys/socket.h>
+#endif
+
+#ifdef HAVE_WINSOCK2_H
+#include <winsock2.h>           /* needed to define AF_ values on Windows */
+#endif
+
 #include <epan/packet.h>
 #include <epan/emem.h>
 #include <epan/aftypes.h>
@@ -294,6 +302,7 @@ static gint ett_dplay_spp_info_mask = -1;
 static gint ett_dplay_type02_flags = -1;
 static gint ett_dplay_type05_flags = -1;
 static gint ett_dplay_type29_spp = -1;
+static gint ett_dplay_pd = -1;
 
 static const value_string dplay_command_val[] = {
     { 0x0001, "Enum Sessions Reply" },
@@ -515,8 +524,8 @@ static gint dissect_session_desc(proto_tree *tree, tvbuff_t *tvb, gint offset)
 
 static gint dissect_packed_player(proto_tree *tree, tvbuff_t *tvb, gint offset)
 {
-    proto_tree *flags_tree;
-    proto_item *flags_item;
+    proto_tree *flags_tree, *pd_tree;
+    proto_item *flags_item, *pd_item;
     guint32 flags, sn_len, ln_len, sd_len, pd_len, num_players, i;
     gint size;
 
@@ -556,8 +565,15 @@ static gint dissect_packed_player(proto_tree *tree, tvbuff_t *tvb, gint offset)
     if (ln_len)
         offset = display_unicode_string(tree, hf_dplay_pp_long_name, tvb, offset);
 
-    proto_tree_add_item(tree, hf_dplay_pp_sp_data, tvb, offset, sd_len, FALSE);
-    offset += sd_len;
+    if ((sd_len == 2*sizeof(struct sockaddr)) && (tvb_get_letohs(tvb, offset) == AF_INET)) {
+        pd_item = proto_tree_add_text(tree, tvb, offset, 0, "PackedPlayer service provider data");
+        pd_tree = proto_item_add_subtree(pd_item, ett_dplay_pd);
+        offset = dissect_sockaddr_in(pd_tree, tvb, offset);
+        offset = dissect_sockaddr_in(pd_tree, tvb, offset);
+    } else {
+        proto_tree_add_item(tree, hf_dplay_pp_sp_data, tvb, offset, sd_len, FALSE);
+        offset += sd_len;
+    }
 
     if (pd_len) {
         proto_tree_add_item(tree, hf_dplay_pp_player_data, tvb, offset, pd_len, FALSE);
@@ -606,8 +622,8 @@ static gint dissect_dplay_super_packed_player(proto_tree *tree, tvbuff_t *tvb, g
     guint32 have_short_name, have_long_name, sp_length_type, pd_length_type;
     guint32 player_count_type, have_parent_id, shortcut_count_type;
     guint32 player_data_length, sp_data_length, player_count, shortcut_count;
-    proto_item *flags_item = NULL, *im_item = NULL;
-    proto_tree *flags_tree = NULL, *im_tree = NULL;
+    proto_item *flags_item = NULL, *im_item = NULL, *pd_item;
+    proto_tree *flags_tree = NULL, *im_tree = NULL, *pd_tree;
     gint len;
 
     proto_tree_add_item(tree, hf_dplay_spp_size, tvb, offset, 4, TRUE); offset += 4;
@@ -672,8 +688,15 @@ static gint dissect_dplay_super_packed_player(proto_tree *tree, tvbuff_t *tvb, g
         len = spp_get_value(sp_length_type, tvb, offset, &sp_data_length);
         proto_tree_add_item(tree, hf_dplay_spp_sp_data_length, tvb, offset, len, TRUE);
         offset += len;
-        proto_tree_add_item(tree, hf_dplay_spp_sp_data, tvb, offset, sp_data_length, FALSE);
-        offset += sp_data_length;
+        if ((sp_data_length == 2*sizeof(struct sockaddr)) && (tvb_get_letohs(tvb, offset) == AF_INET)) {
+            pd_item = proto_tree_add_text(tree, tvb, offset, 0, "SuperPackedPlayer service provider data");
+            pd_tree = proto_item_add_subtree(pd_item, ett_dplay_pd);
+            offset = dissect_sockaddr_in(pd_tree, tvb, offset);
+            offset = dissect_sockaddr_in(pd_tree, tvb, offset);
+        } else {
+            proto_tree_add_item(tree, hf_dplay_spp_sp_data, tvb, offset, sp_data_length, FALSE);
+            offset += sp_data_length;
+        }
     }
 
     if (player_count_type) {
@@ -1747,6 +1770,7 @@ void proto_register_dplay(void)
         &ett_dplay_type02_flags,
         &ett_dplay_type05_flags,
         &ett_dplay_type29_spp,
+        &ett_dplay_pd,
     };
 
     proto_dplay = proto_register_protocol (
